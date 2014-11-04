@@ -12,18 +12,16 @@ If there are clashes in the keys and values of records between the base system a
 
 Therefore the other source systems will need to be modified in some way to retain the records, and not overwrite the base system. The basic process involved here is:
 
-* 
+ * If the source systems are dbf files, convert dbf into csv
+ * Clashes in Variable tables will increment the non-base system variable number to the next available number
+ * Clashes in WQ tables will increment the SAMPLENO by 1
+ * Clashes in GW tables will not be resolvable simply, and will need to 
 
-
-If you find yourself dealing with large tables from the Hydstra system (groundwater or water quality are examples) you may find yourself 
-
-
-This importer caches data in a provisional, dated SQLite database for further processing
-The import also performs some provisional cleansing of the data by removing unclosed quote ("), (') characters that exist in the DNRM GWDB files
+The script also assumes that you are using potentially large tables, like WQ tables, and so caches data in a provisional, dated SQLite database
 
 Code snippet.
 
-  use Import;
+  use mergifyHy;
   
   my $import = Import->new( 
    
