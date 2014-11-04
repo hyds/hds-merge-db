@@ -47,13 +47,7 @@ Code snippet.
 =head2 tables()
   
 Return hashref of all the Hydstra tables in the configuration files
-
-=skip      
-      
-      my %foreign_fields;
-      
-      print "Fields [".$_->{foreign_field}."]\n" for @{$config->{elements}};
-=cut      
+ 
     }
     push (@hytables,$_) for keys \%hytables;
     #return \%tables; #\%foreign_fields;
