@@ -4,7 +4,20 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-Import data from QLD DNRM Ground Water db .txt files to Hydstra.
+This script aims to merge two large Hydstra(TM) systems into one system.
+
+It assumes that when merging two or more Hydstra systems, you will want to keep one of the systems intact. This is called the "base system". 
+
+If there are clashes in the keys and values of records between the base system and another source system, the base system will not be modified.
+
+Therefore the other source systems will need to be modified in some way to retain the records, and not overwrite the base system. The basic process involved here is:
+
+* 
+
+
+If you find yourself dealing with large tables from the Hydstra system (groundwater or water quality are examples) you may find yourself 
+
+
 This importer caches data in a provisional, dated SQLite database for further processing
 The import also performs some provisional cleansing of the data by removing unclosed quote ("), (') characters that exist in the DNRM GWDB files
 
