@@ -2,7 +2,7 @@
 
 Version 0.01
 
-=head1 SYNOPSIS
+=head1 Synopsis
 
 This script aims to merge two large Hydstra(TM) systems into one system.
 
@@ -29,18 +29,24 @@ Code snippet.
 
   $import->log;
      
-=head1 EXPORTS
+=head1 Exports
 
   * tables()
   * FileList()
 
-=head1 SUBROUTINES/METHODS
+=head1 Subroutines
 
-=head2 SUCCESS
+
+=head1 Use
+
+This is designed to be used with HASMERGE.HSC. HASMERGE provides the interface to mergify-hy.
+
+
+=head2 Success
   
   Constant used for logging the success status of the module at any step
 
-=head2 FAIL
+=head2 Fail
   
   Constant used for logging the fail status of the module at any step
 
