@@ -17,6 +17,14 @@ Therefore the other source systems will need to be modified in some way to retai
 
 The script also assumes that you are using potentially large tables, like WQ tables, and so caches data in a provisional, dated SQLite database
 
+## Parameter screen
+
+![Parameter screen](/images/psc.png)
+
+## INI configuration
+
+![INI file](/images/ini.png)
+
 ## Version
 
 Version 0.01
