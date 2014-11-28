@@ -87,7 +87,7 @@ main: {
   IniHash($script.'.ini',\%ini, 0 ,0);
   
   my $fs = Import::fs->new();
-  Prt('-P',HashDump(\%ini));
+  #Prt('-P',HashDump(\%ini));
   
   my $temp          = HyconfigValue('JUNKPATH').'mergify\\';
   my $csv_temp      = $temp.'csv\\';
@@ -100,7 +100,8 @@ main: {
   
   my %source        = %{$ini{'source_tables'}};
   my $reportfile    = $ini{perl_parameters}{out};
-  my $junk_db       = $junk_db_dir.NowString().'.db';
+  #my $junk_db       = $junk_db_dir.NowString().'.db';
+  my $junk_db = $junk_db_dir.'20141128120918.db';
   
 =skip  
 
@@ -122,48 +123,58 @@ main: {
   #import base db csv files to SQLite.db
   my @base_files = $fs->FList($base_dir,'csv');
   my $imp = Import::ToSQLite->new({'temp' =>$temp,'db_file' =>$junk_db});
-  
-  
+   
   #Uncomment to import to csv
   #$imp->import_hydbutil_export_formatted_csv(\@base_files);
-  
   
   #get non-base file lists
   opendir my($dh), $csv_temp or die "Couldn't open dir '$csv_temp': $!";
   my @source_dirs = grep { ! /^(\.\.?)$/ } readdir $dh;
   #my @source_dirs = grep { !/^(\.\.?|base)$/ } readdir $dh;
-  #my $junk_db = $junk_db_dir.'20141122131939.db';
-  
+ 
   #Prt('-P',"Source_dirs [".HashDump(\@source_dirs)."]");
   
-  #process VARIABLE tables if they exist
-  my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
   
+  #process VARIABLE tables if they exist
   my %var_sys_file;
     
-  #create variable & system file hash
   foreach ( @source_dirs ){
+    #collect variable tables
     my @sfiles = $fs->FList($csv_temp.$_,'variable.csv');
     $var_sys_file{$_} =  $sfiles[0];
   }  
   #Prt('-P',"var_sys_file [".HashDump(\%var_sys_file)."]\n");
   
+  my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
   my $var_mappings = $merge->combine_variable_tables(\%var_sys_file);
   
   #Prt('-P',"var_mappings [".HashDump(\%{$var_mappings})."]\n");
   
   #import new variable table hash to sqlite db
-  $imp->import_hash({var_map_ref=>$var_mappings,module=>'variable'});
+  $imp->import_hash({'data'=>$var_mappings->{data},'module'=>'variable'});
   
-  #need to lookup the new variable numbers for each system and convert them 
+  #merge
+  foreach ( @source_dirs ){
+    my $system = $_;
+      
+    #next if ( $_ !~ m{^(.*)l_hydx$}i);
+    my $source_dir = $csv_temp.$_;
+    my @src_files = $fs->FList($source_dir,'csv');
+    Prt('-P',"source DIRS [$source_dir] [$_], junk_db [$junk_db] HashDump \n[".HashDump(\@src_files)."]\n");
+    
+    #my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
+    $merge->merge_hydbutil_export_formatted_csv({'source_files'=>\@src_files,'variable_mappings'=>$var_mappings->{mappings}});
+  }
   
-  my $new_varno = $merge->lookup_new_varno(\%var_sys_file);
+  
+    #need to lookup the new variable numbers for each system and convert them 
+  
+ # my $new_varno = $merge->lookup_new_varno(\%var_sys_file);
   
   
   
-  Prt('-P',"Variable Mapping Returned from combine variable tables [".HashDump(\%var_mappings)."]\n");
+  #Prt('-P',"Variable Mapping Returned from combine variable tables [".HashDump(\%var_mappings)."]\n");
   #Now that we have the merged variable table 
-  #1. write it to the SQLite db
   #2. fix up the remaining variable tables using the mappings hash
   #3. merge the samples tables
   #4. map the results tables
@@ -177,19 +188,8 @@ main: {
   #$compbined_variables{};
   #$system_variable_mapping{$system}{$variable} = $variable_mapping;
   #$system_variable_mapping{vic_citrix}{1110} = 1112;
-    
-  #merge
-  foreach ( @source_dirs ){
-    my $system = $_;
-      
-    #next if ( $_ !~ m{^(.*)l_hydx$}i);
-    my $source_dir = $csv_temp.$_;
-    my @src_files = $fs->FList($source_dir,'csv');
-    Prt('-P',"source DIRS [$source_dir] [$_], junk_db [$junk_db] HashDump \n[".HashDump(\@src_files)."]\n");
-    
-    #my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
-    #$merge->merge_hydbutil_export_formatted_csv(@src_files,);
-  }
+  
+  
   
 =skip    
   Prt('-P',"source_dirs\n".HashDump(\@source_dirs));
