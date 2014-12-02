@@ -1,4 +1,5 @@
-# Mergify-hy
+hds-merge-db
+============
 
 This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one system.
 

@@ -9,10 +9,12 @@ Head = MergifyHy - Merge 2 or more Hydstra systems
 
 
 [Labels]
-OUT     = END   2 10 Report Output
+EXP     = END   2 10 Export Folder
+OUT     = END   +0 +1 Report Output
 
 [Fields] 
-OUT     = 3   10 INPUT   CHAR       10  0  FALSE   FALSE  0.0 0.0 'S' $OP
+EXP     = 3   10 INPUT   CHAR       40  0  FALSE   FALSE  0.0 0.0 'C:\temp\mergify_export\' $PA
+OUT     = +0  +1 INPUT   CHAR       20  0  FALSE   FALSE  0.0 0.0 'S' $OP
 
 [Perl]
 
@@ -54,6 +56,8 @@ our $VERSION = '0.01';
 
 =cut
 
+use strict;
+use warnings;
 use DateTime;
 use Env;
 use File::Copy;
@@ -62,7 +66,8 @@ use Try::Tiny;
 use FindBin qw($Bin);
 
 #Hydrological Administration Services Modules
-use local::lib "$Bin/HAS/";
+use local::lib "$Bin/HDS/";
+use Export::SQLite;
 use Export::dbf;
 use Hydstra;
 use Import;
@@ -77,7 +82,7 @@ use Import::Mergify;
 require 'hydlib.pl';
 require 'hydtim.pl';
 
-my (%variables_log);
+my (%variables_log,%ini);
 
 main: {
 
@@ -94,14 +99,17 @@ main: {
   my $junk_db_dir   = $temp.'db\\';
   my $base_dir      = $temp.'csv\\base\\';
   
+  my %source        = %{$ini{'source_tables'}};
+  my $export_dir    = $ini{perl_parameters}{exp};
+  my $reportfile    = $ini{perl_parameters}{out};
+  my $junk_db       = $junk_db_dir.NowString().'.db';
+  
   MkDir($temp);
+  MkDir($export_dir);
   MkDir($csv_temp);
   MkDir($junk_db_dir);
   
-  my %source        = %{$ini{'source_tables'}};
-  my $reportfile    = $ini{perl_parameters}{out};
-  #my $junk_db       = $junk_db_dir.NowString().'.db';
-  my $junk_db = $junk_db_dir.'20141128120918.db';
+  my $junk_db = $junk_db_dir.'20141201114424.db';
   
 =skip  
 
@@ -125,7 +133,7 @@ main: {
   my $imp = Import::ToSQLite->new({'temp' =>$temp,'db_file' =>$junk_db});
    
   #Uncomment to import to csv
-  #$imp->import_hydbutil_export_formatted_csv(\@base_files);
+  $imp->import_hydbutil_export_formatted_csv(\@base_files);
   
   #get non-base file lists
   opendir my($dh), $csv_temp or die "Couldn't open dir '$csv_temp': $!";
@@ -160,14 +168,13 @@ main: {
     #next if ( $_ !~ m{^(.*)l_hydx$}i);
     my $source_dir = $csv_temp.$_;
     my @src_files = $fs->FList($source_dir,'csv');
-    Prt('-P',"source DIRS [$source_dir] [$_], junk_db [$junk_db] HashDump \n[".HashDump(\@src_files)."]\n");
+    #Prt('-P',"source DIRS [$source_dir] [$_], junk_db [$junk_db] HashDump \n[".HashDump(\@src_files)."]\n");
     
     #my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
     $merge->merge_hydbutil_export_formatted_csv({'source_files'=>\@src_files,'variable_mappings'=>$var_mappings->{mappings}});
   }
   
-  
-    #need to lookup the new variable numbers for each system and convert them 
+
   
  # my $new_varno = $merge->lookup_new_varno(\%var_sys_file);
   
@@ -179,9 +186,13 @@ main: {
   #3. merge the samples tables
   #4. map the results tables
   #5. merge the results tables.
+  #6. Export to HYCLIPIN file format
+  my $exp = Export::SQLite->new({'temp'=>$temp,'db_file'=>$junk_db});
+  $exp->to_hyclipin({'out'=>$export_dir});
   
-  
-  Prt('-P',"systemfiles \n[".HashDump(\%var_sys_file)."]\n");
+ 
+  #Prt('-P',"systemfiles \n[".HashDump(\%var_sys_file)."]\n");
+  Prt('-R',"systemfiles\n");
   
   
   
