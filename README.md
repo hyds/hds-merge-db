@@ -3,6 +3,8 @@ hds-merge-db
 
 This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one system.
 
+Typically you should not perform the merge task on a production system, but rather on a copy of that system
+
 ## Synopsis
 
 Mergify-hy assumes that when merging two or more Hydstra systems, you will want to keep one of the systems intact. This is called the "base system". 
@@ -20,6 +22,10 @@ The systems and tables you want to merge are configured in the INI file, so you 
 ![Parameter screen](/images/psc.PNG)
 
 ## INI configuration
+
+In the INI config file you can select a few of the DBF files for merging from your copy of DBFPATH. 
+
+You MUST have a 'base' system which is the one that will be the starting point to which others are compared. All other subsection names are arbitrary except for the 'base' subsection name which has a fixed meaning so be careful. The base system will not be changed, whilst others may be if they clash with the base system
 
 ![INI file](/images/ini.png)
 
