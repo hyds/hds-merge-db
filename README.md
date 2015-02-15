@@ -26,7 +26,9 @@ When running the script make sure that you do a manual sanity/quality assurance 
 
 ## Parameter screen
 
-The systems and tables you want to merge are configured in the INI file, so you only have one button, and a report destination.
+As noted above, the systems and tables you want to merge are configured in the INI file.
+
+You may have already converted the DBF files to 
 
 ![Parameter screen](/images/psc.PNG)
 
