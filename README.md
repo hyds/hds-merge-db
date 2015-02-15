@@ -4,9 +4,7 @@ Version 0.02
 
 # Synopsis
 
-This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one system.
-
-Typically you should not perform the merge task on a production system, but rather on a copy of that system
+This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one system. Typically you should not perform the merge task on a production system, but rather on a copy of that system
 
 Mergify-hy assumes that when merging two or more Hydstra systems, you will want to keep one of the systems intact. This is called the "base system". 
 
@@ -15,6 +13,8 @@ If there are clashes in the keys and values of records between the base system a
 Therefore the other source systems will need to be modified in some way to retain the record, but not overwrite the base system.
 
 The script also assumes that you are using potentially large tables, like WQ tables, with millions of rows, and so it caches data in a provisional, dated SQLite database.
+
+When running the script make sure that you do a manual sanity/quality assurance check that the output tables are valid before making them your production data.
 
 ## Parameter screen
 
