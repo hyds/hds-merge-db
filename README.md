@@ -41,20 +41,45 @@ The basic process involved here is:
 5. Manually import the HYCLIPIN files to your final system
 
 ## Clashes
- 
-### Clashes in SITE tables
 
-Usually there are complex business rules for naming a site. These differ between businesses and between projects. Due to this variabiliyt, no automation has been implemented and checking for clashes will need to be done manually. So the SITE table itself is assumed to have no clashes.
+Clash handling is detailed in the table below. Usually there are complex business rules for naming a site. These differ 
+between businesses and between projects. Due to this variabiliyt, no automation has been implemented and checking for clashes will need to be done manually. So the SITE table itself is assumed to have no clashes.
 
 * If there is a site number in a non-base system (which is not a clash) it will be imported to the base system
 
-### Clashes in Variable tables 
+ 
+|	TABLE	|	HANDLING TYPE	|	CLASH HANDLING	|
+|-----------|-------------------|-------------------|
+|	SITE 	|	 Manual	|		|
+|	    STATION 	|	 Manual	|		|
+|	    STNINIKW 	|	Auto	|	 Append, On clash append '_systemID' (handled before SNINI and changes pushed to STNINI)	|
+|	    STNINI 	|	Auto	|	 increment STNINI.ORDER by 1	|
+|	    BENCH 	|	Auto	|	 increment BENCH.BENCH by 1	|
+|	    HISTORY 	|	Auto	|	 increment HISTORY.STATTIME by 1	|
+|	    PERIOD 	|	 Calculated table, leave	|		|
+|	    INSTHIST 	|	 Manual	|		|
+|	    SERIES 	|	 Calculated table, leave 	|		|
+|	    PEAKTIME 	|	 Calculated table, leave 	|		|
+|	    RATEPER 	|	 Manual	|		|
+|	    RATEHED 	|	 Manual	|		|
+|	    RATEPTS 	|	 Manual	|		|
+|	    RATEEQN 	|	 Manual	|		|
+|	    TTABHED 	|	 Manual	|		|
+|	    TTABPTS 	|	 Manual	|		|
+|	    SSHIFT 	|	 Manual	|		|
+|	    TSHIFT 	|	 Manual	|		|
+|	    GAUGINGS 	|	 Manual	|		|
+|	    GAUGMEAS 	|	 Manual	|		|
+|	    SECTHED 	|	 Manual	|		|
+|	    SECTIONS 	|	 Manual	|		|
+|	    SECTSURV 	|	 Manual	|		|
+|	    NRSTN 	|	 Manual	|		|
+|	    VRWEWA 	|	 Manual	|		|
+|	    VRWMON 	|	 Manual	|		|
+|	    VARIABLE	|	 Auto	|	non-base system variable number will increment by 1 to the next available free number in the base system variable table	|
+|	    SAMPLES	|	 Auto	|	non-base system SAMPLES.SAMPLENO increment by 1	|
+|	    RESULTS	|	 Auto	|	non-base system RESULTS.SAMPLENO increment by 1	|
 
-* The base system will be preserved and non-base system variable number will increment by 1 to the next available free number in the base system variable table
-
-### Clashes in WQ tables
-
-* The base system will be preserved and non-base system will increment the SAMPLENO by 1
 
 ### Clashes in GW tables NOT IMPLEMENTED
 
