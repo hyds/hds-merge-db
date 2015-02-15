@@ -15,11 +15,13 @@ Therefore the other source systems will need to be modified in some way to retai
 
 The basic process involved here is:
 
-### DBF Conversion
- 
- If the source systems are dbf files, convert dbf into csv
- 
-### Clashes
+* DBF Conversion to CSV (if selected, otherwise assuem CSVs are there)
+* Import base system to temp SQLite.db
+* Import non-base systems to temp SQLite.db and handle clashes
+* Export a merged system from the temp SQLite.db to HYCLIPIN files
+* Manually import the HYCLIPIN files to your final system
+
+## Clashes
  
 #### Clashes in Variable tables 
 
