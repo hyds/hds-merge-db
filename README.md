@@ -1,11 +1,12 @@
-hds-merge-db
-============
+# Version
+
+Version 0.02
+
+# Synopsis
 
 This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one system.
 
 Typically you should not perform the merge task on a production system, but rather on a copy of that system
-
-## Synopsis
 
 Mergify-hy assumes that when merging two or more Hydstra systems, you will want to keep one of the systems intact. This is called the "base system". 
 
@@ -69,11 +70,7 @@ In order to store data in SQL tables Hydstra tables have been defined in other m
 * fs
 * import
 * export
-
-## Version
-
-Version 0.02
-  
+ 
 ## Bugs
 
 Please report any bugs in the issues wiki.
