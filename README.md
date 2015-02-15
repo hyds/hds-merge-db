@@ -8,13 +8,21 @@ This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one syste
 
 Mergify-hy assumes that when merging two or more Hydstra systems, you will want to keep one of the systems intact. This is called the "base system". 
 
-If there are clashes in the keys and values of records between the base system and another system, the base system will not be modified.
-
-Therefore the other source systems will need to be modified in some way to retain the record, but not overwrite the base system.
+If there are clashes in the keys and values of records between the base system and another system, the base system will not be modified. Therefore the other source systems will need to be modified in some way to retain the record, but not overwrite the base system.
 
 The script also assumes that you are using potentially large tables, like WQ tables, with millions of rows, and so it caches data in a provisional, dated SQLite database.
 
 When running the script make sure that you do a manual sanity/quality assurance check that the output tables are valid before making them your production data.
+
+# Procedure
+
+1. Copy DBF paths of all the systems to a safe location
+2. Identify the base system folder in the [source_tables] section of the INI configuration file
+3. Idenfify the non-base systems folder in the [source_tables] section of the INI configuration file
+4. Specify which tables to merge in the [merge_tables]
+5. Run script 
+6. Use HYCLIPIN to import the resulting tables to a work area
+7. Perform a quality/sanity check on the data 
 
 ## Parameter screen
 
@@ -30,9 +38,9 @@ You MUST have a 'base' system which is the one that will be the starting point t
 
 ![INI file](/images/ini.png)
 
-## Process
+## Script process
 
-The basic process involved here is:
+The basic process that the script steps through is:
 
 1. DBF Conversion to CSV (if selected, otherwise assuem CSVs are there)
 2. Import base system to temp SQLite.db
