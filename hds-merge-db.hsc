@@ -9,15 +9,20 @@ Head = MergifyHy - Merge 2 or more Hydstra systems
 
 
 [Labels]
-EXP     = END   2 10 Export Folder
+CON     = END   2 10 Convert from DBF?
+;DBFB    = END   +0 +1 DBF Folder for Base System
+;DBFI    = END   +0 +1 DBF Folder for systems to be integrated
+EXP     = END   +0 +1 HYCLIPIN Export Folder
 OUT     = END   +0 +1 Report Output
 
 [Fields] 
-EXP     = 3   10 INPUT   CHAR       40  0  FALSE   FALSE  0.0 0.0 'C:\temp\mergify_export\' $PA
+CON     = 3   10 INPUT   LIST        2  0  TRUE   0.0 0.0 'NO' YNO
+;DBFB    = +0  +1 INPUT   CHAR       40  0  FALSE   FALSE  0.0 0.0 'C:\temp\merge\base' $PA
+;DBFI    = +0  +1 INPUT   CHAR       40  0  FALSE   FALSE  0.0 0.0 'C:\temp\merge\integrate' $PA
+EXP     = +0  +1 INPUT   CHAR       40  0  FALSE   FALSE  0.0 0.0 'C:\temp\export\' $PA
 OUT     = +0  +1 INPUT   CHAR       20  0  FALSE   FALSE  0.0 0.0 'S' $OP
 
 [Perl]
-
 
 
 =cut
@@ -25,11 +30,11 @@ OUT     = +0  +1 INPUT   CHAR       20  0  FALSE   FALSE  0.0 0.0 'S' $OP
 
 =head1 VERSION
 
-Version 0.01
+Version 1.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '1.02';
 
 =head1 SYNOPSIS
 
@@ -63,10 +68,10 @@ use Env;
 use File::Copy;
 use Try::Tiny;
 
-use FindBin qw($Bin);
+use FindBin qw($Bin $Script);
 
 #Hydrological Administration Services Modules
-use local::lib "$Bin/HDS/";
+use local::lib "$Bin";
 use Export::SQLite;
 use Export::dbf;
 use Hydstra;
@@ -87,9 +92,13 @@ my (%variables_log,%ini);
 main: {
 
   #Gather parameters and config
-  my $script     = lc(FileName($0));
+  my $script     = lc($Script);
+  my $iniFile    = $script;
+  $iniFile       =~ s{hsc$}{ini}i;
+  $iniFile       = $Bin.'/'.$iniFile;
+  
   IniHash($ARGV[0],\%ini, 0, 0);
-  IniHash($script.'.ini',\%ini, 0 ,0);
+  IniHash($iniFile,\%ini, 0 ,0);
   
   my $fs = Import::fs->new();
   #Prt('-P',HashDump(\%ini));
@@ -100,6 +109,9 @@ main: {
   my $base_dir      = $temp.'csv\\base\\';
   
   my %source        = %{$ini{'source_tables'}};
+  my $convert_dbf   = $ini{perl_parameters}{con};
+  #my $dbfb_dir      = $ini{perl_parameters}{dbfb};
+  #my $integrate_dir = $ini{perl_parameters}{dbfi};
   my $export_dir    = $ini{perl_parameters}{exp};
   my $reportfile    = $ini{perl_parameters}{out};
   my $junk_db       = $junk_db_dir.NowString().'.db';
@@ -109,25 +121,23 @@ main: {
   MkDir($csv_temp);
   MkDir($junk_db_dir);
   
-  my $junk_db = $junk_db_dir.'20141201114424.db';
+  #my $junk_db = $junk_db_dir.'20141201114424.db';
   
-=skip  
-
-  #export dbf to csv
-  foreach my $system ( keys %source){
-    my $temp_dir = $csv_temp.$system.'\\';
-    MkDir($temp_dir);
-    my $sys_dir = $source{$system}.'\\';
-    my @dbfs = $fs->FList($sys_dir,'dbf');
-    foreach ( @dbfs){
-      next if ( ! defined $ini{'merge_tables'}{lc(FileName($_))} );
-      my $exp = Export::dbf->new();
-      $exp->export($_,$temp_dir); 
-    }
-  }  
+  #export dbf to csv?
+  if ( lc($convert_dbf) eq 'yes' ){
+    foreach my $system ( keys %source){
+      my $temp_dir = $csv_temp.$system.'\\';
+      MkDir($temp_dir);
+      my $sys_dir = $source{$system}.'\\';
+      my @dbfs = $fs->FList($sys_dir,'dbf');
+      foreach ( @dbfs ){
+        next if ( ! defined $ini{'merge_tables'}{lc(FileName($_))} );
+        my $exp = Export::dbf->new();
+        $exp->export($_,$temp_dir); 
+      }
+    }  
+  }
  
-=cut
-  
   #import base db csv files to SQLite.db
   my @base_files = $fs->FList($base_dir,'csv');
   my $imp = Import::ToSQLite->new({'temp' =>$temp,'db_file' =>$junk_db});
