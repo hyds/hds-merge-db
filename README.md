@@ -23,21 +23,21 @@ The basic process involved here is:
 
 ## Clashes
  
-#### Clashes in Variable tables 
+### Clashes in Variable tables 
 
 * The base system will be preserved and non-base system variable number will increment by 1 to the next available free number in the base system variable table
 
-#### Clashes in SITE tables
+### Clashes in SITE tables
 
 Usually there are complex business rules for naming a site. These differ between businesses and between projects. Due to this variabiliyt, no automation has been implemented and checking for clashes will need to be done manually. So the SITE table itself is assumed to have no clashes.
 
 * If there is a site number in a non-base system (which is not a clash) it will be imported to the base system
 
-#### Clashes in WQ tables
+### Clashes in WQ tables
 
 * The base system will be preserved and non-base system will increment the SAMPLENO by 1
 
-#### Clashes in GW tables NOT IMPLEMENTED
+### Clashes in GW tables NOT IMPLEMENTED
 
 * The base system will be preserved and non-base system 
 
