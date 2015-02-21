@@ -14,6 +14,10 @@ The script also assumes that you are using potentially large tables, like WQ tab
 
 When running the script make sure that you do a manual sanity/quality assurance check that the output tables are valid before making them your production data.
 
+# Time series files 
+
+Since Hydstra has binary files for timeseries, it is assumed that the user has already handled them with Hydstra TS management tools and no merge is required. See HYDBUTIL, HYDMWB etc.
+
 # Procedure
 
 1. Copy DBF paths of all the systems to a safe location
