@@ -58,37 +58,37 @@ between businesses and between projects. Due to this variabiliyt, no automation 
 * If there is a site number in a non-base system (which is not a clash) it will be imported to the base system
 
  
-|	TABLE	|	HANDLING TYPE	|	CLASH HANDLING	|
-|-----------|-------------------|-------------------|
-|	SITE 	|	 Manual	|		|
-|	    STATION 	|	 Manual	|		|
-|	    STNINIKW 	|	Auto	|	 Append, On clash append '_systemID' (handled before SNINI and changes pushed to STNINI)	|
-|	    STNINI 	|	Auto	|	 increment STNINI.ORDER by 1	|
-|	    BENCH 	|	Auto	|	 increment BENCH.BENCH by 1	|
-|	    HISTORY 	|	Auto	|	 increment HISTORY.STATTIME by 1	|
-|	    PERIOD 	|	 Calculated table, leave	|		|
-|	    INSTHIST 	|	 Manual	|		|
-|	    SERIES 	|	 Calculated table, leave 	|		|
-|	    PEAKTIME 	|	 Calculated table, leave 	|		|
-|	    RATEPER 	|	 Manual	|		|
-|	    RATEHED 	|	 Manual	|		|
-|	    RATEPTS 	|	 Manual	|		|
-|	    RATEEQN 	|	 Manual	|		|
-|	    TTABHED 	|	 Manual	|		|
-|	    TTABPTS 	|	 Manual	|		|
-|	    SSHIFT 	|	 Manual	|		|
-|	    TSHIFT 	|	 Manual	|		|
-|	    GAUGINGS 	|	 Manual	|		|
-|	    GAUGMEAS 	|	 Manual	|		|
-|	    SECTHED 	|	 Manual	|		|
-|	    SECTIONS 	|	 Manual	|		|
-|	    SECTSURV 	|	 Manual	|		|
-|	    NRSTN 	|	 Manual	|		|
-|	    VRWEWA 	|	 Manual	|		|
-|	    VRWMON 	|	 Manual	|		|
-|	    VARIABLE	|	 Auto	|	non-base system variable number will increment by 1 to the next available free number in the base system variable table	|
-|	    SAMPLES	|	 Auto	|	non-base system SAMPLES.SAMPLENO increment by 1	|
-|	    RESULTS	|	 Auto	|	non-base system RESULTS.SAMPLENO increment by 1	|
+|	TABLE	|	HANDLING TYPE	|	CLASH HANDLING	| IMPLEMENTED 	|
+|-----------|-------------------|-------------------|---------------|
+|	SITE 	|	 Manual			|					|				|
+|   STATION	|	 Manual			|					|				|
+|	    STNINIKW 	|	Auto	|	 Append, On clash append '_systemID' (handled before SNINI and changes pushed to STNINI)	|	no			|
+|	    STNINI 	|	Auto	|	 increment STNINI.ORDER by 1	| no				|
+|	    BENCH 	|	Auto	|	 increment BENCH.BENCH by 1	|	no			|
+|	    HISTORY 	|	Auto	|	 increment HISTORY.STATTIME by 1	|	no			|
+|	    PERIOD 	|	 Calculated table, leave	|	n/a	|				|
+|	    INSTHIST 	|	 Manual	|		|	n/a			|
+|	    SERIES 	|	 Calculated table, leave 	|		|	n/a			|
+|	    PEAKTIME 	|	 Calculated table, leave 	|		|	n/a			|
+|	    RATEPER 	|	 Manual	|		|	n/a			|
+|	    RATEHED 	|	 Manual	|		|	n/a			|
+|	    RATEPTS 	|	 Manual	|		|	n/a			|
+|	    RATEEQN 	|	 Manual	|		|	n/a			|
+|	    TTABHED 	|	 Manual	|		|	n/a			|
+|	    TTABPTS 	|	 Manual	|		|	n/a			|
+|	    SSHIFT 	|	 Manual	|		|		n/a		|
+|	    TSHIFT 	|	 Manual	|		|		n/a		|
+|	    GAUGINGS 	|	 Manual	|		|	n/a			|
+|	    GAUGMEAS 	|	 Manual	|		|	n/a			|
+|	    SECTHED 	|	 Manual	|		|	n/a			|
+|	    SECTIONS 	|	 Manual	|		|	n/a			|
+|	    SECTSURV 	|	 Manual	|		|	n/a			|
+|	    NRSTN 	|	 Manual	|		|	n/a			|
+|	    VRWEWA 	|	 Manual	|		|	n/a			|
+|	    VRWMON 	|	 Manual	|		|	n/a			|
+|	    VARIABLE	|	 Auto	|	non-base system variable number will increment by 1 to the next available free number in the base system variable table	|	yes			|
+|	    SAMPLES	|	 Auto	|	non-base system SAMPLES.SAMPLENO increment by 1	|	yes			|
+|	    RESULTS	|	 Auto	|	non-base system RESULTS.SAMPLENO increment by 1	|	yes			|
 
 
 ### Clashes in GW tables NOT IMPLEMENTED
