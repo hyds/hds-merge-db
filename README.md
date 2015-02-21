@@ -116,58 +116,6 @@ The basic process that the script steps through is:
 4. Export a merged system from the temp SQLite.db to HYCLIPIN files
 5. Manually import the HYCLIPIN files to your final system
 
-## Clashes
-
-Clash handling is detailed in the table below. Usually there are complex business rules for naming a site. These differ 
-between businesses and between projects. Due to this variabiliyt, no automation has been implemented and checking for clashes will need to be done manually. So the SITE table itself is assumed to have no clashes.
-
-* If there is a site number in a non-base system (which is not a clash) it will be imported to the base system
-
- 
-|	TABLE	|	HANDLING TYPE	|	CLASH HANDLING	| IMPLEMENTED 	|
-|-----------|-------------------|-------------------|---------------|
-|	SITE 	|	 Manual			|	Default			|	no			|
-|   STATION	|	 Manual			|	Default			|	no			|
-|	    STNINIKW 	|	Auto	|	 Append, On clash append '_systemID' (handled before SNINI and changes pushed to STNINI)	|	no			|
-|	    STNINI 	|	Auto	|	 increment STNINI.ORDER by 1	| no				|
-|	    BENCH 	|	Auto	|	 increment BENCH.BENCH by 1	|	no			|
-|	    HISTORY 	|	Auto	|	 increment HISTORY.STATTIME by 1	|	no			|
-|	    PERIOD 	|	 Calculated table, leave	| Default |	no			|
-|	    INSTHIST 	|	 Manual	| Default |	no			|
-|	    SERIES 	|	 Calculated table, leave 	| Default |	no			|
-|	    PEAKTIME 	|	 Calculated table, leave 	| Default |	no			|
-|	    RATEPER 	|	 Manual	| Default |	no			|
-|	    RATEHED 	|	 Manual	| Default |	no			|
-|	    RATEPTS 	|	 Manual	| Default |	no			|
-|	    RATEEQN 	|	 Manual	| Default |	no			|
-|	    TTABHED 	|	 Manual	| Default |	no			|
-|	    TTABPTS 	|	 Manual	| Default |	no			|
-|	    SSHIFT 	|	 Manual	|	Default	|		no		|
-|	    TSHIFT 	|	 Manual	|	Default	|		no		|
-|	    GAUGINGS 	|	 Manual	|	Default	|	no			|
-|	    GAUGMEAS 	|	 Manual	|	Default	|	no			|
-|	    SECTHED 	|	 Manual	|	Default	|	no			|
-|	    SECTIONS 	|	 Manual	|	Default	|	no			|
-|	    SECTSURV 	|	 Manual	|	Default	|	no			|
-|	    NRSTN 	|	 Manual	|	Default	|	no			|
-|	    VRWEWA 	|	 Manual	|	Default	|	no			|
-|	    VRWMON 	|	 Manual	|	Default	|	no			|
-|	    VARIABLE	|	 Auto	|	non-base system variable number will increment by 1 to the next available free number in the base system variable table	|	yes			|
-|	    SAMPLES	|	 Auto	|	non-base system SAMPLES.SAMPLENO increment by 1	|	yes			|
-|	    RESULTS	|	 Auto	|	non-base system RESULTS.SAMPLENO increment by 1	|	yes			|
-|	GWHOLE 	|	 Manual			|	Default				|	no			|
-|	GWPIPE 	|	 Manual			|	Default				|	no			|
-|	HYDMEAS 	|	 Manual			| Default				|	no			|
-|	HYDRLMP 	|	 Manual			| Default				|	no			|
-|	COMPANY 	|	 Manual			| Default				|	no			|
-|	DRILLER 	|	 Manual			| Default				|	no			|
-|	DRILLIC 	|	 Manual			| Default				|	no			|
-|	GWHGU	 	|	 Manual			| Default				|	no			|
-
-
-Default: If key clash, check values, if value clash, report
-
-
 ## Dependencies
 
 In order to store data in SQL tables Hydstra tables have been defined in other modules using OO Perl. hence it has dependencies, all of which can be downloaded from GitHub
