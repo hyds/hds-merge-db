@@ -60,13 +60,13 @@ between businesses and between projects. Due to this variabiliyt, no automation 
  
 |	TABLE	|	HANDLING TYPE	|	CLASH HANDLING	| IMPLEMENTED 	|
 |-----------|-------------------|-------------------|---------------|
-|	SITE 	|	 Manual			|					|				|
-|   STATION	|	 Manual			|					|				|
+|	SITE 	|	 Manual			|					|	n/a			|
+|   STATION	|	 Manual			|					|	n/a			|
 |	    STNINIKW 	|	Auto	|	 Append, On clash append '_systemID' (handled before SNINI and changes pushed to STNINI)	|	no			|
 |	    STNINI 	|	Auto	|	 increment STNINI.ORDER by 1	| no				|
 |	    BENCH 	|	Auto	|	 increment BENCH.BENCH by 1	|	no			|
 |	    HISTORY 	|	Auto	|	 increment HISTORY.STATTIME by 1	|	no			|
-|	    PERIOD 	|	 Calculated table, leave	|	n/a	|				|
+|	    PERIOD 	|	 Calculated table, leave	|		|	n/a			|
 |	    INSTHIST 	|	 Manual	|		|	n/a			|
 |	    SERIES 	|	 Calculated table, leave 	|		|	n/a			|
 |	    PEAKTIME 	|	 Calculated table, leave 	|		|	n/a			|
