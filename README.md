@@ -44,7 +44,7 @@ You MUST have a 'base' system which is the one that will be the starting point t
 
 ![INI file](/images/ini.png)
 
-### Default
+### Default Actions
 If you specify a table = 1, you will get the default action which is to simply report on clash
 
 ``` ini
@@ -55,7 +55,7 @@ samples = 1
 
 ```
 
-### Actions
+### Clash Actions
 You can specify a set of finite actions that you want the script to perform when it finds a clash. Action options are increment, decrement, append, prepend.
 The actions are essentially your business rules. 
 
@@ -102,7 +102,7 @@ If this was a groundwater table like GWHOLE you might want to increment the HOLE
 
 ``` ini
 
-gwhole = {keys:[{fieldname:"hole",action:"increment",value:1}],subordinates:["gwpipe","hydmeas","hydrlmp","casing","aquifer","drilling"]}
+gwhole = { keys:[{fieldname:"hole",action:"increment",value:1}],subordinates:["gwpipe","hydmeas","hydrlmp","casing","aquifer","drilling"]}
 
 ```
 
