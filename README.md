@@ -63,7 +63,7 @@ In the example below SAMPNUM will be increment by one for the RESULTS table
 
 ``` ini
 
-results = {keys:{field:sampnum,action:increment,value:1},subordinates:null}
+results = {keys:{field:"sampnum",action:"increment",value:1},subordinates:null}
 
 ```
 
@@ -72,6 +72,15 @@ If you wanted to append some text such as "_merge" to the RESULTS.SAMPNUM field 
 ``` ini
 
 results = {keys:{field:"sampnum",action:"append",value:"_merge"},subordinates:null}
+
+```
+
+If you wanted to change two key fields for some reason you could specify it like this:
+
+
+``` ini
+
+gwpipe = {keys:[{field:"hole",action:"increment",value:1},{field:"pipe",action:"increment",value:1}],subordinates:null}
 
 ```
 
