@@ -44,6 +44,59 @@ You MUST have a 'base' system which is the one that will be the starting point t
 
 ![INI file](/images/ini.png)
 
+### DEFAULT
+
+You will get the default action which is to simply report on clash
+
+``` ini
+
+site = 1 
+
+```
+
+### ACTIONS
+
+You can specify a set of finite actions that you want the script to perform when it finds a clash
+The actions are essentially your business rules
+In the example below sampno will be increment by one for the results table
+Action options are increment, decrement, append, prepend.
+
+``` ini
+
+results = {keys:{field:sampno,action:increment,value:1},subordinates:null}
+
+```
+
+If you wanted to append some text such as "_merge" to the sampnum field instead of incrementing by 1 you would have,
+
+``` ini
+
+results = {keys:{field:"sampno",action:"append",value:"_merge"},subordinates:null}
+
+```
+
+### ORPHANS
+
+For the example above, we will have changed the results table with no respect for the samples table. 
+So we have potentially just created orphan records.
+To take care of orphans can simply say that the results table was subordinate to the samples table.
+This way, any changes to SAMPLES.SAMPNUM will cascade down to the RESULTS table
+We could specify such like so:
+
+``` ini
+
+samples = {keys:[{fieldname:"sampno",action:"increment",value:1}],subordinates:["results"]}
+
+```
+
+If this was a groundwater table like GWHOLE you might want to increment the HOLE field by one and cascade this down to all subordinate tables
+
+``` ini
+
+gwhole = {keys:[{fieldname:"hole",action:"increment",value:1}],subordinates:["gwpipe","hydmeas","hydrlmp","casing","aquifer","drilling"]}
+
+```
+
 ## Script process
 
 The basic process that the script steps through is:
