@@ -60,40 +60,47 @@ between businesses and between projects. Due to this variabiliyt, no automation 
  
 |	TABLE	|	HANDLING TYPE	|	CLASH HANDLING	| IMPLEMENTED 	|
 |-----------|-------------------|-------------------|---------------|
-|	SITE 	|	 Manual			|					|	n/a			|
-|   STATION	|	 Manual			|					|	n/a			|
+|	SITE 	|	 Manual			|	Default			|	no			|
+|   STATION	|	 Manual			|	Default			|	no			|
 |	    STNINIKW 	|	Auto	|	 Append, On clash append '_systemID' (handled before SNINI and changes pushed to STNINI)	|	no			|
 |	    STNINI 	|	Auto	|	 increment STNINI.ORDER by 1	| no				|
 |	    BENCH 	|	Auto	|	 increment BENCH.BENCH by 1	|	no			|
 |	    HISTORY 	|	Auto	|	 increment HISTORY.STATTIME by 1	|	no			|
-|	    PERIOD 	|	 Calculated table, leave	|		|	n/a			|
-|	    INSTHIST 	|	 Manual	|		|	n/a			|
-|	    SERIES 	|	 Calculated table, leave 	|		|	n/a			|
-|	    PEAKTIME 	|	 Calculated table, leave 	|		|	n/a			|
-|	    RATEPER 	|	 Manual	|		|	n/a			|
-|	    RATEHED 	|	 Manual	|		|	n/a			|
-|	    RATEPTS 	|	 Manual	|		|	n/a			|
-|	    RATEEQN 	|	 Manual	|		|	n/a			|
-|	    TTABHED 	|	 Manual	|		|	n/a			|
-|	    TTABPTS 	|	 Manual	|		|	n/a			|
-|	    SSHIFT 	|	 Manual	|		|		n/a		|
-|	    TSHIFT 	|	 Manual	|		|		n/a		|
-|	    GAUGINGS 	|	 Manual	|		|	n/a			|
-|	    GAUGMEAS 	|	 Manual	|		|	n/a			|
-|	    SECTHED 	|	 Manual	|		|	n/a			|
-|	    SECTIONS 	|	 Manual	|		|	n/a			|
-|	    SECTSURV 	|	 Manual	|		|	n/a			|
-|	    NRSTN 	|	 Manual	|		|	n/a			|
-|	    VRWEWA 	|	 Manual	|		|	n/a			|
-|	    VRWMON 	|	 Manual	|		|	n/a			|
+|	    PERIOD 	|	 Calculated table, leave	| Default |	no			|
+|	    INSTHIST 	|	 Manual	| Default |	no			|
+|	    SERIES 	|	 Calculated table, leave 	| Default |	no			|
+|	    PEAKTIME 	|	 Calculated table, leave 	| Default |	no			|
+|	    RATEPER 	|	 Manual	| Default |	no			|
+|	    RATEHED 	|	 Manual	| Default |	no			|
+|	    RATEPTS 	|	 Manual	| Default |	no			|
+|	    RATEEQN 	|	 Manual	| Default |	no			|
+|	    TTABHED 	|	 Manual	| Default |	no			|
+|	    TTABPTS 	|	 Manual	| Default |	no			|
+|	    SSHIFT 	|	 Manual	|	Default	|		no		|
+|	    TSHIFT 	|	 Manual	|	Default	|		no		|
+|	    GAUGINGS 	|	 Manual	|	Default	|	no			|
+|	    GAUGMEAS 	|	 Manual	|	Default	|	no			|
+|	    SECTHED 	|	 Manual	|	Default	|	no			|
+|	    SECTIONS 	|	 Manual	|	Default	|	no			|
+|	    SECTSURV 	|	 Manual	|	Default	|	no			|
+|	    NRSTN 	|	 Manual	|	Default	|	no			|
+|	    VRWEWA 	|	 Manual	|	Default	|	no			|
+|	    VRWMON 	|	 Manual	|	Default	|	no			|
 |	    VARIABLE	|	 Auto	|	non-base system variable number will increment by 1 to the next available free number in the base system variable table	|	yes			|
 |	    SAMPLES	|	 Auto	|	non-base system SAMPLES.SAMPLENO increment by 1	|	yes			|
 |	    RESULTS	|	 Auto	|	non-base system RESULTS.SAMPLENO increment by 1	|	yes			|
+|	GWHOLE 	|	 Manual			|	Default				|	no			|
+|	GWPIPE 	|	 Manual			|	Default				|	no			|
+|	HYDMEAS 	|	 Manual			| Default				|	no			|
+|	HYDRLMP 	|	 Manual			| Default				|	no			|
+|	COMPANY 	|	 Manual			| Default				|	no			|
+|	DRILLER 	|	 Manual			| Default				|	no			|
+|	DRILLIC 	|	 Manual			| Default				|	no			|
+|	GWHGU	 	|	 Manual			| Default				|	no			|
 
 
-### Clashes in GW tables NOT IMPLEMENTED
+Default: If key clash, check values, if value clash, report
 
-* The base system will be preserved and non-base system 
 
 ## Dependencies
 
