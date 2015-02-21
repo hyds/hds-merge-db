@@ -1,12 +1,11 @@
 =setup
-
 [Configuration]
-ListFileExtension = TXT
+ListFileExtension = HTM
 
 [Window]
 Name = HAS
 Head = MergifyHy - Merge 2 or more Hydstra systems
-
+Tail = Enter Parameters, <PgDn>:Execute, <F1>:Help, <F2>:Lookup, <Esc>:Abort.
 
 [Labels]
 CON     = END   2 10 Convert from DBF?
@@ -39,25 +38,10 @@ our $VERSION = '1.02';
 =head1 SYNOPSIS
 
   This HYSCRIPT merges multiple systems into one system
+ 
+  TODO:
   
-  Things to check
-  1. is this the same name as any other variable
-  2. yes? then change the source system var no to the base varno and keep a log of this for the system
-  3. is the same varno, and almost hte same name? ( then just use the base var and skip)
-  4. is the same varno but a different name? (then search for a free one, and keep a log of all the variables so you don't overwrite)
-  5. also keep a log of the system and the varno mapping so that the results can map the variable when encourntered.
-  
-  Procedure:
-  1. Open all variable tables for the base system
-  2. create a hash of the tables2. create hashes of the source system tables
-  2.1 fuzzy match the first few characters, and the units, and the Hydstra units
-  2.2 if there is a variable fuzzy match then 
-  3. if the variable is registered find the next available
-  4. Log all the new variables
-  4.1 save to the variable sql
-  5. hash log of the system, and the variable mapping for that system
-  6. 
-  6.1 open all tables in 
+  Add Default action - log and report any clashes.
 
 =cut
 
@@ -79,6 +63,7 @@ use Import;
 use Import::fs;
 use Import::ToSQLite;
 use Import::Mergify;
+use Import::Tables;
 
 #use Hydstra::GetHeaders;
 #use Logger;
@@ -87,7 +72,7 @@ use Import::Mergify;
 require 'hydlib.pl';
 require 'hydtim.pl';
 
-my (%variables_log,%ini);
+my ( %variables_log, %ini );
 
 main: {
 
@@ -97,6 +82,8 @@ main: {
   $iniFile       =~ s{hsc$}{ini}i;
   $iniFile       = $Bin.'/'.$iniFile;
   
+  Prt('-P',"inifile [$iniFile]");
+
   IniHash($ARGV[0],\%ini, 0, 0);
   IniHash($iniFile,\%ini, 0 ,0);
   
@@ -109,6 +96,7 @@ main: {
   my $base_dir      = $temp.'csv\\base\\';
   
   my %source        = %{$ini{'source_tables'}};
+  my $merge_tables  = $ini{'merge_tables'};
   my $convert_dbf   = $ini{perl_parameters}{con};
   #my $dbfb_dir      = $ini{perl_parameters}{dbfb};
   #my $integrate_dir = $ini{perl_parameters}{dbfi};
@@ -123,6 +111,10 @@ main: {
   
   #my $junk_db = $junk_db_dir.'20141201114424.db';
   
+  # Get the tables for import form INI as hash
+  my $im = Import::Tables->new(); 
+  my %tables = $im->get_tables_hash({'merge_tables'=>$merge_tables});
+
   #export dbf to csv?
   if ( lc($convert_dbf) eq 'yes' ){
     foreach my $system ( keys %source){
@@ -131,31 +123,32 @@ main: {
       my $sys_dir = $source{$system}.'\\';
       my @dbfs = $fs->FList($sys_dir,'dbf');
       foreach ( @dbfs ){
-        next if ( ! defined $ini{'merge_tables'}{lc(FileName($_))} );
+        #next if ( ! defined $ini{'merge_tables'}{lc(FileName($_))} );
+        next if ( ! defined $tables{lc(FileName($_))} );
         my $exp = Export::dbf->new();
         $exp->export($_,$temp_dir); 
       }
     }  
   }
  
-  #import base db csv files to SQLite.db
+  Prt('-P',"Pause\n",HashDump(\%tables));
+  # gwhole = { keys:[{fieldname:"hole",action:"increment",value:1}],subordinates:["gwpipe","hydmeas","hydrlmp","casing","aquifer","drilling"]}
+  
+  # Import base db csv files to SQLite.db
   my @base_files = $fs->FList($base_dir,'csv');
   my $imp = Import::ToSQLite->new({'temp' =>$temp,'db_file' =>$junk_db});
    
-  #Uncomment to import to csv
+  # Import base files csv to SQLite - no merge required, just a straight import
   $imp->import_hydbutil_export_formatted_csv(\@base_files);
   
-  #get non-base file lists
+  # Get non-base db dir list
   opendir my($dh), $csv_temp or die "Couldn't open dir '$csv_temp': $!";
   my @source_dirs = grep { ! /^(\.\.?)$/ } readdir $dh;
   #my @source_dirs = grep { !/^(\.\.?|base)$/ } readdir $dh;
  
-  #Prt('-P',"Source_dirs [".HashDump(\@source_dirs)."]");
-  
   
   #process VARIABLE tables if they exist
-  my %var_sys_file;
-    
+  my %var_sys_file;    
   foreach ( @source_dirs ){
     #collect variable tables
     my @sfiles = $fs->FList($csv_temp.$_,'variable.csv');
@@ -163,6 +156,7 @@ main: {
   }  
   #Prt('-P',"var_sys_file [".HashDump(\%var_sys_file)."]\n");
   
+
   my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
   my $var_mappings = $merge->combine_variable_tables(\%var_sys_file);
   
@@ -178,51 +172,18 @@ main: {
     #next if ( $_ !~ m{^(.*)l_hydx$}i);
     my $source_dir = $csv_temp.$_;
     my @src_files = $fs->FList($source_dir,'csv');
-    #Prt('-P',"source DIRS [$source_dir] [$_], junk_db [$junk_db] HashDump \n[".HashDump(\@src_files)."]\n");
     
     #my $merge = Import::Mergify->new({'base_db_file'=>$junk_db});
     $merge->merge_hydbutil_export_formatted_csv({'source_files'=>\@src_files,'variable_mappings'=>$var_mappings->{mappings}});
   }
   
 
-  
  # my $new_varno = $merge->lookup_new_varno(\%var_sys_file);
   
-  
-  
-  #Prt('-P',"Variable Mapping Returned from combine variable tables [".HashDump(\%var_mappings)."]\n");
-  #Now that we have the merged variable table 
-  #2. fix up the remaining variable tables using the mappings hash
-  #3. merge the samples tables
-  #4. map the results tables
-  #5. merge the results tables.
-  #6. Export to HYCLIPIN file format
   my $exp = Export::SQLite->new({'temp'=>$temp,'db_file'=>$junk_db});
   $exp->to_hyclipin({'out'=>$export_dir});
   
- 
-  #Prt('-P',"systemfiles \n[".HashDump(\%var_sys_file)."]\n");
-  Prt('-R',"systemfiles\n");
-  
-  
-  
-  #$compbined_variables{};
-  #$system_variable_mapping{$system}{$variable} = $variable_mapping;
-  #$system_variable_mapping{vic_citrix}{1110} = 1112;
-  
-  
-  
-=skip    
-  Prt('-P',"source_dirs\n".HashDump(\@source_dirs));
-  #Prt('-P',"dir handle [$source]\n");
-  my @source_files = DOSFList($source,1); # $fs->FList(@source_dirs,'*.csv');
-  
-  #Prt('-P',"base_files\n".HashDump(\@base_files));
-  #Prt('-P',"source_files\n[".HashDump(\@source_files)."]");
-=cut  
-  Prt("-P","temp [$temp]"); #, reportfile [$reportfile], source [$source], base [$base]\n");
-
-  
+  Prt("-P","systemfiles output to temp [$temp]"); #, reportfile [$reportfile], source [$source], base [$base]\n");
 }
 
 
