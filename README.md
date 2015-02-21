@@ -44,38 +44,38 @@ You MUST have a 'base' system which is the one that will be the starting point t
 
 ![INI file](/images/ini.png)
 
-### DEFAULT
-
-You will get the default action which is to simply report on clash
+### Default
+If you specify a table = 1, you will get the default action which is to simply report on clash
 
 ``` ini
 
 site = 1 
+results = 1
+samples = 1
 
 ```
 
-### ACTIONS
+### Actions
+You can specify a set of finite actions that you want the script to perform when it finds a clash. Action options are increment, decrement, append, prepend.
+The actions are essentially your business rules. 
 
-You can specify a set of finite actions that you want the script to perform when it finds a clash
-The actions are essentially your business rules
-In the example below sampno will be increment by one for the results table
-Action options are increment, decrement, append, prepend.
+In the example below SAMPNUM will be increment by one for the RESULTS table
 
 ``` ini
 
-results = {keys:{field:sampno,action:increment,value:1},subordinates:null}
+results = {keys:{field:sampnum,action:increment,value:1},subordinates:null}
 
 ```
 
-If you wanted to append some text such as "_merge" to the sampnum field instead of incrementing by 1 you would have,
+If you wanted to append some text such as "_merge" to the RESULTS.SAMPNUM field instead of incrementing by 1 you would have the following:
 
 ``` ini
 
-results = {keys:{field:"sampno",action:"append",value:"_merge"},subordinates:null}
+results = {keys:{field:"sampnum",action:"append",value:"_merge"},subordinates:null}
 
 ```
 
-### ORPHANS
+### Orphans
 
 For the example above, we will have changed the results table with no respect for the samples table. 
 So we have potentially just created orphan records.
@@ -85,11 +85,11 @@ We could specify such like so:
 
 ``` ini
 
-samples = {keys:[{fieldname:"sampno",action:"increment",value:1}],subordinates:["results"]}
+samples = {keys:[{fieldname:"sampnum",action:"increment",value:1}],subordinates:["results"]}
 
 ```
 
-If this was a groundwater table like GWHOLE you might want to increment the HOLE field by one and cascade this down to all subordinate tables
+If this was a groundwater table like GWHOLE you might want to increment the HOLE field by one and cascade this down to all subordinate tables, and you would do such thus:
 
 ``` ini
 
