@@ -4,7 +4,7 @@ Version 0.02
 
 # Synopsis
 
-This HYSCRIPT aims to merge two or more large Hydstra(TM) systems into one system. Typically you should not perform the merge task on a production system, but rather on a copy of that system
+This HYSCRIPT aims to merge two or more large Hydstra(TM) FoxPro systems into one system. Typically you should not perform the merge task on a production system, but rather on a copy of that system
 
 Mergify-hy assumes that when merging two or more Hydstra systems, you will want to keep one of the systems intact. This is called the "base system". 
 
@@ -32,7 +32,7 @@ Since Hydstra has binary files for timeseries, it is assumed that the user has a
 
 As noted above, the systems and tables you want to merge are configured in the INI file.
 
-You may have already converted the DBF files to 
+You may have already converted the DBF files to CSV previously. If this is the case then uncheck the DBF box.
 
 ![Parameter screen](/images/psc.PNG)
 
@@ -45,7 +45,7 @@ You MUST have a 'base' system which is the one that will be the starting point t
 ![INI file](/images/ini.png)
 
 ### Default Actions
-If you specify a table = 1, you will get the default action which is to simply report on clash
+If you specify a table = 1, you will get the default action which is to simply report on any clashes. This means that the base system is not altered.
 
 ``` ini
 
@@ -57,7 +57,7 @@ samples = 1
 
 ### Clash Actions
 You can specify a set of finite actions that you want the script to perform when it finds a clash. Action options are increment, decrement, append, prepend.
-The actions are essentially your business rules. 
+The actions are essentially your business rules for merging. 
 
 In the example below SAMPNUM will be increment by one for the RESULTS table
 
@@ -86,10 +86,10 @@ gwpipe = {keys:[{field:"hole",action:"increment",value:1},{field:"pipe",action:"
 
 ### Orphans
 
-For the example above, we will have changed the results table with no respect for the samples table. 
+For the example above, we will have changed the RESULTS table with no respect for the SAMPLES table. 
 So we have potentially just created orphan records.
-To take care of orphans can simply say that the results table was subordinate to the samples table.
-This way, any changes to SAMPLES.SAMPNUM will cascade down to the RESULTS table
+To take care of orphans can simply say that the RESULTS table was subordinate to the SAMPLES table.
+This way, when a clash occurs, any changes that are made to SAMPLES.SAMPNUM will cascade down to the RESULTS table. 
 We could specify such like so:
 
 ``` ini
