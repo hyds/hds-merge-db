@@ -106,6 +106,24 @@ gwhole = { keys:[{fieldname:"hole",action:"increment",value:1}],subordinates:["g
 
 ```
 
+### Variables
+
+Due to the baroque nature of the field naming conventions in the Hydstra VARIABLE tables we need to be careful to handle the different field names correctly, and cascade them correctly to the subordinate tables. Don't change this section if you don't know what you are doing. If you do know what you are doing, just make sure that all the of actions and values are the same otherwise you will corrupt the association of VARIABLE numbers and actual data. 
+
+You need to make sure that: 
+
+1. you have the correct field name, because this changes between tables 
+2. any table that has a variable number in the key is listed in the subortinates
+3. you specify the correct number format for the key with the "combined_var":"prefix/suffix" tag because some fields 
+
+#3 above is required because some key fields in the target tables are a combination of key fields in the source tables ... it's complex. So becaue you might have multiple keys that you wish to change you need to tell the script how to cascade the parent field to the child tables.
+
+``` ini
+
+variable 	= 	{ "keys": [{ "field":"varnum", "action":"increment", "value":1, "combined_var":"prefix","subordinates":[{"table":"wqvar","field":"variable"},{"table":"varsub","field":"variable"},{"table":"varcon"},{"table":"results"},{"table":"hydmeas","field":"variable"},{"table":"gwtrace","field":"variable"}] }] }
+
+``
+
 ## Script process
 
 The basic process that the script steps through is:
