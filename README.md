@@ -116,7 +116,7 @@ You need to make sure that:
 2. any table that has a variable number in the key is listed in the subortinates
 3. you specify the correct number format for the key with the "combined_var":"prefix/suffix" tag because some fields 
 
-#3 above is required because some key fields in the target tables are a combination of key fields in the source tables ... it's complex. So becaue you might have multiple keys that you wish to change you need to tell the script how to cascade the parent field to the child tables.
+Point #3 above is required because some key fields in the target tables are a combination of key fields in the source tables ... it's complex. So becaue you might have multiple keys that you wish to change you need to tell the script how to cascade the parent field to the child tables.
 
 ``` ini
 
