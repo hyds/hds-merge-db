@@ -63,7 +63,7 @@ In the example below SAMPNUM will be increment by one for the RESULTS table
 
 ``` ini
 
-results = {keys:{field:"sampnum",action:"increment",value:1},subordinates:null}
+samples 	= { "keys": [{ "field":"sampnum", "action":"increment", "value":1, "subordinates":[{"table":"results"}] }] }
 
 ```
 
@@ -71,7 +71,8 @@ If you wanted to append some text such as "_merge" to the RESULTS.SAMPNUM field 
 
 ``` ini
 
-results = {keys:{field:"sampnum",action:"append",value:"_merge"},subordinates:null}
+samples 	= { "keys": [{ "field":"sampnum", "action":"append", "value":"_merge", "subordinates":[{"table":"results"}] }] }
+
 
 ```
 
@@ -94,7 +95,7 @@ We could specify such like so:
 
 ``` ini
 
-samples = {keys:[{fieldname:"sampnum",action:"increment",value:1}],subordinates:["results"]}
+samples 	= { "keys": [{ "field":"sampnum", "action":"increment", "value":1, "subordinates":[{"table":"results"}] }] }
 
 ```
 
@@ -102,7 +103,7 @@ If this was a groundwater table like GWHOLE you might want to increment the HOLE
 
 ``` ini
 
-gwhole = { keys:[{fieldname:"hole",action:"increment",value:1}],subordinates:["gwpipe","hydmeas","hydrlmp","casing","aquifer","drilling"]}
+gwhole 		= { "keys": [{ "field":"hole", "action":"increment", "value":1, "subordinates":[{"table":"gwpipe"},{"table":"hydmeas"},{"table":"hydrlmp"}] }] }
 
 ```
 
